@@ -11,7 +11,9 @@ public class Application {
             ArrayList randomNumber = generateRandomNum();
             compareNum(generateRandomNum());
             String exitNum = Console.readLine();
-            if(exitNum == "2")break;
+            int IntExitNum = Integer.parseInt(exitNum);
+            if(IntExitNum == 2)
+                break;
         }
         System.out.println("프로그램을 종료합니다.");
     }
@@ -22,13 +24,15 @@ public class Application {
 
 
     public static ArrayList generateRandomNum(){  //generating RandomNumber
-        int firstRandomNum = Randoms.pickNumberInRange(1,9);    //세자리 랜덤변수 각각생성
-        int secondRandomNum = Randoms.pickNumberInRange(1,9);
-        int thirdRandomNum = Randoms.pickNumberInRange(1,9);
-        ArrayList listRandomNum = new ArrayList<>();            //리스트로 합치기
-        listRandomNum.add(firstRandomNum);
-        listRandomNum.add(secondRandomNum);
-        listRandomNum.add(thirdRandomNum);
+        ArrayList listRandomNum = new ArrayList<>();
+
+        //make randomNumber
+        for(int i =0; i < 3; i++) {
+            int RandomNum = Randoms.pickNumberInRange(1, 9);
+            if(listRandomNum.indexOf(RandomNum)==-1) {  //no randomNum in listRandomNum -> push
+                listRandomNum.add(RandomNum);
+            }else i--;                                  //randomNum in listRandomNum index-1
+        }
         return listRandomNum;
     }
 
@@ -37,14 +41,12 @@ public class Application {
 
     public static ArrayList inputNum() {  //scanning the user's number.
         String input;
-        while (true) {
-            input = Console.readLine();
-            if (input.length() != 3) {      //if input's length is not 3 Input again the number.
-                System.out.println("숫자 세개를 입력하세요");
-                continue;
-            }
-            break;
+
+        input = Console.readLine();
+        if (input.length() != 3) {      //if input's length is not 3 Input again the number.
+            throw new IllegalArgumentException("3자리 수를 입력하세요.");
         }
+
 
         int inputNum = Integer.parseInt(input);  //string to int
 
@@ -81,14 +83,8 @@ public class Application {
 
             copiedRandomNumber.addAll(randomNumber);  //copying the random number
 
-            //스트라이크 갯수, 스트라이크는 0으로 전환
-            for (int i=0; i<3; i++) {
-                if (inputNumber.get(i) == randomNumber.get(i)) {
-                    strike += 1;
-                    inputNumber.set(i, 0);
-                    copiedRandomNumber.set(i, 0);
-                }
-            }
+            //스트라이크 갯수
+            strike = amountStrike(inputNumber, randomNumber);
 
             //중복값 없애기 위해 set 사용
             Set<String> inputSet = new HashSet<String>();
@@ -101,11 +97,6 @@ public class Application {
             int amountStrikeBall = inputSet.size();
 
             ball = amountStrikeBall - strike;
-
-            //스트라이크 2개면 볼 음수 -> 볼 0으로 만들기
-            if (ball<0){
-                ball = 0;
-            }
 
 
             if (strike == 3) {
@@ -122,10 +113,21 @@ public class Application {
             } else {
                 System.out.println(strike + "스트라이크 " + ball + "볼");
             }
-            System.out.println(randomNumber);
         }
         System.out.println("3개의 숫자를 모두 맞히셨습니다! 게임종료");
         System.out.println("게임을 새로 시작하려면 1, 종료하려면 2를 입력하세요.");
+    }
+
+
+
+    public static int amountStrike(ArrayList input, ArrayList random){
+        int strike=0;
+        for (int i=0; i<3; i++) {
+            if (input.get(i) == random.get(i)) {
+                strike += 1;
+            }
+        }
+        return strike;
     }
 
 }
