@@ -16,7 +16,9 @@ public class PlayBall {
 
 		//make randomNumber
 		for (int i = 0; i < 3; i++) {
-			int RandomNum = Randoms.pickNumberInRange(1, 9);
+			int START_NUM = 1;
+			int LAST_NUM = 9;
+			int RandomNum = Randoms.pickNumberInRange(START_NUM, LAST_NUM);
 			if (listRandomNum.indexOf(RandomNum) == -1) {  //no randomNum in listRandomNum -> push
 				listRandomNum.add(RandomNum);
 				continue;
@@ -28,12 +30,14 @@ public class PlayBall {
 	}
 
 	public List<Integer> inputNum() {  //scanning the user's number.
-		System.out.println("숫자를 입력하세요.");
+		String INPUT_MENTION = "숫자를 입력하세요.";
+		String EXECPTION_MENTION = "3자리 수를 입력하세요.";
+		System.out.println(INPUT_MENTION);
 
 		String input;
 		input = Console.readLine();
 		if (input.length() != 3) {      //if input's length is not 3 Input again the number.
-			throw new IllegalArgumentException("3자리 수를 입력하세요.");
+			throw new IllegalArgumentException(EXECPTION_MENTION);
 		}
 
 		//"321" -> (int) 321
@@ -79,19 +83,23 @@ public class PlayBall {
 
 		ball = amountStrikeBall - strike;
 
+		String NOTING_WORD ="낫싱";
+		String STRIKE_WORD="스트라이크";
+		String BALL_WORD="볼";
+
 		if (strike == 3) {
 			return true;
 		} else if (strike == 0 && ball == 0) {
-			System.out.println("낫싱");
+			System.out.println(NOTING_WORD);
 
 		} else if (strike != 0 && ball == 0) {
-			System.out.println(strike + "스트라이크");
+			System.out.println(strike + STRIKE_WORD);
 
 		} else if (strike == 0 && ball != 0) {
-			System.out.println(ball + "볼");
+			System.out.println(ball + BALL_WORD);
 
 		} else {
-			System.out.println(strike + "스트라이크 " + ball + "볼");
+			System.out.println(strike + STRIKE_WORD + ball + BALL_WORD);
 		}
 
 		return false;
