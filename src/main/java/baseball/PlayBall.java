@@ -12,21 +12,21 @@ import camp.nextstep.edu.missionutils.Randoms;
 public class PlayBall {
 
 	public List<Integer> generateRandomNum() {  //generating RandomNumber
-		List<Integer> listRandomNum = new ArrayList<>();
+		List<Integer> list_RandomNum = new ArrayList<>();
 
 		//make randomNumber
 		for (int i = 0; i < 3; i++) {
 			int START_NUM = 1;
 			int LAST_NUM = 9;
 			int RandomNum = Randoms.pickNumberInRange(START_NUM, LAST_NUM);
-			if (listRandomNum.indexOf(RandomNum) == -1) {  //no randomNum in listRandomNum -> push
-				listRandomNum.add(RandomNum);
+			if (list_RandomNum.indexOf(RandomNum) == -1) {  //no randomNum in listRandomNum -> push
+				list_RandomNum.add(RandomNum);
 				continue;
 			}
 
 			i--;
 		}
-		return listRandomNum;
+		return list_RandomNum;
 	}
 
 	public List<Integer> inputNum() {  //scanning the user's number.
@@ -36,26 +36,31 @@ public class PlayBall {
 
 		String input;
 		input = Console.readLine();
-		if (input.length() != 3) {      //if input's length is not 3 Input again the number.
-			throw new IllegalArgumentException(EXECPTION_MENTION);
+		try{
+			if (input.length() != 3) {      //if input's length is not 3 Input again the number.
+				throw new IllegalArgumentException(EXECPTION_MENTION);
+			}
+		}catch (IllegalArgumentException e){
+			System.out.println(e.getMessage());
+			System.exit(0);
 		}
 
 		//"321" -> (int) 321
 		int inputNum = Integer.parseInt(input);  //string to int
-		List<Integer> listInputNum = intToList(inputNum);
+		List<Integer> list_InputNum = intToList(inputNum);
 
-		return listInputNum;
+		return list_InputNum;
 	}
 
 	private List<Integer> intToList(int inputNum) {
-		List<Integer> listInputNum = new ArrayList<>(); //make list
+		List<Integer> list_InputNum = new ArrayList<>(); //make list
 
 		while (inputNum > 0) {  //put each Int element to list
-			listInputNum.add(inputNum % 10);
+			list_InputNum.add(inputNum % 10);
 			inputNum /= 10;
 		}
-		Collections.reverse(listInputNum);
-		return listInputNum;
+		Collections.reverse(list_InputNum);
+		return list_InputNum;
 	}
 
 	public boolean compareNum(List<Integer> randomNumber, List<Integer> userNums) {
@@ -88,6 +93,7 @@ public class PlayBall {
 		String BALL_WORD="볼";
 
 		if (strike == 3) {
+			System.out.println(strike + STRIKE_WORD);
 			return true;
 		} else if (strike == 0 && ball == 0) {
 			System.out.println(NOTING_WORD);
@@ -99,13 +105,13 @@ public class PlayBall {
 			System.out.println(ball + BALL_WORD);
 
 		} else {
-			System.out.println(strike + STRIKE_WORD + ball + BALL_WORD);
+			System.out.println( ball + BALL_WORD+" "+strike + STRIKE_WORD);
 		}
 
 		return false;
 	}
 
-	public int countStrike(List<Integer> input, List<Integer> random) {
+	private int countStrike(List<Integer> input, List<Integer> random) {
 		int strike = 0;
 		for (int i = 0; i < 3; i++) {
 			if (input.get(i) == random.get(i)) {
